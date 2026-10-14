@@ -1,0 +1,47 @@
+# =============================================================================
+# ~/.hermes/.gitignore  —  ALLOWLIST model
+# =============================================================================
+# This directory is a LIVE DATA directory, not just config. It holds:
+#   * API keys            .env, auth.json (OAuth credential pool)
+#   * personal content    sessions/, logs/, memories/, pairing/
+#   * machine state       state.db, kanban.db, cache/, runtime/, sandboxes/
+#   * installed bundles   scripts/whatsapp-bridge/, skills/ (image-synced)
+#
+# So the default here is "ignore EVERYTHING", and the handful of files worth
+# versioning are re-included explicitly below. A denylist would leak the first
+# time Hermes invents a new state file; this fails closed instead.
+#
+# To version something new: add a `!/<name>` line, then run `git status` and
+# read the output before committing. Never `git add -A` blind in here.
+# =============================================================================
+/*
+
+# -----------------------------------------------------------------------------
+# Belt and braces: refuse these even if the allowlist below is loosened.
+# Listed BEFORE the re-includes on purpose — in .gitignore the LAST matching
+# pattern wins, so `!/.env.example` must come after `.env.*` to survive.
+# -----------------------------------------------------------------------------
+.env
+.env.*
+auth.json
+install_id
+*.lock
+*.pid
+*.sock
+*.db
+*.db-shm
+*.db-wal
+*.bak-*
+*.orig
+models_dev_cache.json
+.skills_prompt_snapshot.json
+
+# -----------------------------------------------------------------------------
+# ALLOWLIST — the only things that get committed.
+# -----------------------------------------------------------------------------
+!/.gitignore
+!/README.md
+!/SOUL.md
+!/config.yaml
+!/.env.example
+!/tools/
