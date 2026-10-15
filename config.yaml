@@ -75,15 +75,16 @@ plugins:
 # description embeds a per-server name manifest sized by the budget below.
 #
 # Budget = min(listing_max_tokens, threshold_pct% of context; unknown context
-# counts as a 10K-token leg). 2000 keeps every server's full listing (measured
-# ~1,900 tokens across all four) while capping the worst case at ~2K tokens
-# instead of the 4,000 default. Activation itself is never budget-gated.
+# counts as a 10K-token leg). 2500 keeps every server's FULL listing — all 95
+# deferred tools with one-line descriptions measured ~2,097 tokens (2,000 drops
+# it to bare names). Caps the worst case below the 4,000 default. Activation
+# itself is never budget-gated.
 tools:
   tool_search:
     enabled: "auto"        # defer MCP tools whenever any are registered
     threshold_pct: 5.0     # listing may use up to 5% of the context window
     listing: "auto"        # embed the manifest when it fits the budget
-    listing_max_tokens: 2000
+    listing_max_tokens: 2500
 
 # =============================================================================
 # Model Configuration
