@@ -67,6 +67,25 @@ plugins:
   clone_timeout_seconds: 300
 
 # =============================================================================
+# Tool Configuration
+# =============================================================================
+# Tool Search bridge: MCP tool schemas (home-mempalace 45, git 12, sqlite 12,
+# gpt_researcher 9) are stripped from the model-facing tool array and replaced
+# by three bridge tools (tool_search / tool_describe / tool_call). The bridge
+# description embeds a per-server name manifest sized by the budget below.
+#
+# Budget = min(listing_max_tokens, threshold_pct% of context; unknown context
+# counts as a 10K-token leg). 2000 keeps every server's full listing (measured
+# ~1,900 tokens across all four) while capping the worst case at ~2K tokens
+# instead of the 4,000 default. Activation itself is never budget-gated.
+tools:
+  tool_search:
+    enabled: "auto"        # defer MCP tools whenever any are registered
+    threshold_pct: 5.0     # listing may use up to 5% of the context window
+    listing: "auto"        # embed the manifest when it fits the budget
+    listing_max_tokens: 2000
+
+# =============================================================================
 # Model Configuration
 # =============================================================================
 model:
