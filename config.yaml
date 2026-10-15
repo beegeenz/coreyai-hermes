@@ -2148,3 +2148,18 @@ mcp_servers:
     headers:
       Authorization: Bearer ${MCP_HOME_MEMPALACE_API_KEY}
     enabled: true
+  git:
+    command: uvx
+    args:
+      - mcp-server-git
+      - --repository
+      - /repos/koboldcpp
+    enabled: true
+  sqlite:
+    command: uvx
+    args:
+      - --with
+      - mcp<2
+      - sqlite-mcp-server
+      - /mcp-data/state.db
+    enabled: true
