@@ -92,7 +92,7 @@ tools:
 model:
   # Default model to use (can be overridden with --model flag)
   # Both "default" and "model" work as the key name here.
-  default: "deepseek-flash"
+  default: "qwen3.8-flash-next"
 
   # Inference provider selection:
   #   "auto"         - Auto-detect from credentials (default)
@@ -125,7 +125,7 @@ model:
   #   It works with both no-auth and auth-enabled server modes.
   #
   # Can also be overridden for a single invocation with the --provider flag.
-  provider: "deepseek"
+  provider: "strata"
 
   # API configuration (falls back to OPENROUTER_API_KEY env var)
   # api_key: "your-key-here"  # Uncomment to set here instead of .env
@@ -1185,6 +1185,36 @@ platform_toolsets:
   yuanbao: [hermes-yuanbao]
   teams: [hermes-teams]
   google_chat: [hermes-google_chat]
+  email: [hermes-email]
+
+# --- Telegram group access (added 2026-10-16) --------------------------------
+# Admit the owner's user ID for group traffic, and wake the bot on the bare word
+# "corey" instead of typing the full @Corey_ai_bot mention.
+# NOTE: requires Telegram privacy mode OFF (BotFather -> /setprivacy -> Disable),
+# otherwise Telegram never delivers plain group messages to the bot at all.
+platforms:
+  telegram:
+    # Only reply in the group when addressed (wake word / @mention / reply / /cmd@bot).
+    # Flip to false to have the bot answer every message in the group instead.
+    require_mention: true
+    extra:
+      group_allow_from: ["8918476948"]
+      allowed_chats: ["-5184541199"]
+      mention_patterns:
+        - '(?i)(^|\s)corey\b'
+
+# --- Email platform (added 2026-10-16) ---------------------------------------
+# Address, host, allowlist and authserv-id all live in .env (EMAIL_*) rather
+# than here, so this file stays free of credentials and PII. Only mail from
+# EMAIL_ALLOWED_USERS that also passes SPF/DKIM/DMARC is ever fetched or handed
+# to the agent; every other sender is dropped at the header preflight, so their
+# body is never read.
+  email:
+    enabled: true
+    extra:
+      require_authenticated_sender: true   # require SPF/DKIM/DMARC, pinned to the configured authserv-id
+      unauthorized_dm_behavior: ignore     # never reply to (or fetch mail from) strangers
+      skip_attachments: false              # false = attachments reach the agent
 
 # =============================================================================
 # Gateway Platform Settings
