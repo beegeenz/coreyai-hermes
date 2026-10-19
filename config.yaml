@@ -441,7 +441,7 @@ compression:
   # e.g. 20% of 50% threshold = 10% of total context kept as recent messages.
   # Summary output is separately capped at 12K tokens (Gemini output limit).
   # Range: 0.10 - 0.80
-  target_ratio: 0.1
+  target_ratio: 0.2
 
   # Number of most-recent messages to always preserve (default: 20 ≈ 10 full turns)
   # Higher values keep more recent conversation intact at the cost of more aggressive
@@ -1033,7 +1033,7 @@ agent:
   #   reasoning_effort:
   #     enabled: true
   #     effort: thinking
-  reasoning_effort: "medium"
+  reasoning_effort: "high"
 
   # Per-model reasoning effort overrides (optional dict)
   # Key: any sensible model spelling works (exact, dots↔dashes interchangeable,
