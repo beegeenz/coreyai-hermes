@@ -441,7 +441,7 @@ compression:
   # e.g. 20% of 50% threshold = 10% of total context kept as recent messages.
   # Summary output is separately capped at 12K tokens (Gemini output limit).
   # Range: 0.10 - 0.80
-  target_ratio: 0.20
+  target_ratio: 0.1
 
   # Number of most-recent messages to always preserve (default: 20 ≈ 10 full turns)
   # Higher values keep more recent conversation intact at the cost of more aggressive
@@ -2213,3 +2213,10 @@ mcp_servers:
       - sqlite-mcp-server
       - /mcp-data/state.db
     enabled: true
+auxiliary:
+  compression:
+    reasoning_effort: none
+  title_generation:
+    reasoning_effort: none
+  vision:
+    reasoning_effort: none
