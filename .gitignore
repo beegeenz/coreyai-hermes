@@ -45,23 +45,27 @@ models_dev_cache.json
 !/config.yaml
 !/.env.example
 !/tools/
-# ...but only the two scripts, not the tool store: `hermes pm install` drops
+# ...but only our scripts, not the tool store: `hermes pm install` drops
 # agent-browser / cua-driver binaries here (hundreds of MB, versioned dirs).
 /tools/*
 !/tools/secret-scan.sh
 !/tools/install-hooks.sh
+!/tools/check-model.sh
 
 # Hand-authored skills only. `skills/` as a whole is image-synced (bundled +
 # hub-installed bundles that `hermes update` owns), so re-including it would
-# commit stock files we do not maintain and churn on every upgrade. Scope the
-# re-include to the category we wrote by hand; add another line per category
-# if we ever author a second one.
+# commit stock files we do not maintain and churn on every upgrade.
 #
-# `skills/` itself is excluded by `/*` above, and git never descends into an
-# excluded directory — so the child re-include alone can never win. Re-open the
-# parent as a directory only (no contents), then exclude siblings again so the
-# pattern stays a whitelist rather than an accident waiting for the next
-# hand-authored category to appear.
+# `skills/` is excluded by `/*` above, and git never descends into an excluded
+# directory — so a child re-include alone can never win. Re-open the parent as a
+# directory only (no contents), then exclude siblings again, keeping this a
+# whitelist rather than an accident waiting for the next category.
 !/skills/
 /skills/*
+# Our hand-authored categories:
 !/skills/memory/
+# devops/ is mostly hub-installed skills (sdlc-review is not ours), so
+# re-include that one leaf explicitly rather than the whole category.
+!/skills/devops/
+/skills/devops/*
+!/skills/devops/hermes-model-switching/
