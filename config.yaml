@@ -1176,7 +1176,7 @@ gateway:
 #
 platform_toolsets:
   cli: [hermes-cli]
-  telegram: [hermes-telegram]
+  telegram: [file, skills, browser-use, memory, code_execution, terminal, web, clarify, vision]
   discord: [hermes-discord]
   whatsapp: [hermes-whatsapp]
   slack: [hermes-slack]
