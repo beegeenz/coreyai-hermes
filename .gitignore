@@ -65,8 +65,17 @@ models_dev_cache.json
 # Our hand-authored categories:
 !/skills/memory/
 !/skills/docs/
+# Agent-authored skills we keep (curator reports origin=agent). These live only in
+# ~/.hermes/skills -- the image does NOT ship them, so `hermes update` will not
+# overwrite them, and without these lines nothing in git protects them at all.
+!/skills/productivity/
+/skills/productivity/*
+!/skills/productivity/markdown-to-typeset-pdf/
+!/skills/devops/
 # devops/ is mostly hub-installed skills (sdlc-review is not ours), so
 # re-include that one leaf explicitly rather than the whole category.
-!/skills/devops/
 /skills/devops/*
 !/skills/devops/hermes-model-switching/
+!/skills/devops/coreyai-host-environment/
+# Category-root skill (no category dir):
+!/skills/decision-briefings/
