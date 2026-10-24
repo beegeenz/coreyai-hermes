@@ -64,6 +64,7 @@ models_dev_cache.json
 /skills/*
 # Our hand-authored categories:
 !/skills/memory/
+!/skills/docs/
 # devops/ is mostly hub-installed skills (sdlc-review is not ours), so
 # re-include that one leaf explicitly rather than the whole category.
 !/skills/devops/
