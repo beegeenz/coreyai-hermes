@@ -1,7 +1,7 @@
 ---
 name: mempalace
 description: "Query and maintain the shared MemPalace memory: verify facts before answering, file durable memories, keep single-valued facts current."
-version: 1.1.0
+version: 1.2.0
 author: Hermes Agent
 license: MIT
 platforms: [linux, macos, windows]
@@ -75,8 +75,11 @@ Follow this order. It is the whole point of the skill.
    (structured facts) or `mempalace_search` (prose recall). Never guess. If unsure, say
    "let me check" and query — wrong is worse than slow.
 3. **Before writing**, call `mempalace_check_duplicate`. Filing the same fact twice poisons
-   recall; the palace does not silently merge.
-4. **After meaningful work**, call `mempalace_diary_write` with what happened and what matters.
+recall; the palace does not silently merge.
+4. **After writing**, verify it is retrievable: `mempalace_search` a distinctive phrase from the
+content and confirm your `drawer_id` comes back. `success: true` from `add_drawer` only means
+the call was accepted, not that the text will ever be found again.
+5. **After meaningful work**, call `mempalace_diary_write` with what happened and what matters.
 
 ## Choosing a Tool
 
@@ -108,6 +111,24 @@ item and writes the diary entry in one call. Prefer it at session end.
 wing/room from `mempalace_get_taxonomy` rather than inventing a near-synonym; a new spelling of
 an existing wing splits the index. Rooms are hyphenated slugs naming an idea
 (`gpu-pricing`, `chromadb-setup`), not generic buckets.
+
+### Filing a document or artifact
+
+When asked to "store a copy of" something produced in an earlier session:
+
+1. **Find the artifact on disk, never retype it from memory.** `search_files` the topic keywords
+   with `order=modified`, and `session_search` for the session that produced it to recover the
+   path. Then `read_file` it so the drawer carries the real values, not a paraphrase.
+2. **Redact credentials before filing, then file anyway.** Strip Wi-Fi/admin passwords, tokens,
+   and keys, and put a line in the drawer naming the private on-disk path where the full copy
+   lives. The palace is shared and every agent on the box can semantic-search it, so a secret
+   filed once is readable forever — but redacting is not a reason to refuse the filing.
+3. **One drawer per document.** `add_drawer` chunks long content automatically and search returns
+   chunk-level hits that all carry the same `drawer_id`; splitting a doc across drawers just
+   fragments recall. Point at machine-readable bulk (CSV exports, MAC/lease tables, raw API
+   payloads) instead of duplicating it — the file on disk is the better copy.
+4. Pass `source_file` as the **absolute** origin path: search echoes it back as `source_path`,
+   and it is the handle `mempalace_delete_by_source` needs later.
 
 ### Changing a fact
 

@@ -1,17 +1,31 @@
 ---
 name: pdf-generation
-description: "Compile Markdown to PDF in ~/system-docs with generate_pdf.py / build-pdf.sh: one render, a definitive pages=/bookmarks= report, and the exact WeasyPrint bookmark tuple shape. Prevents infinite re-render loops."
-version: 1.0.0
+description: "Compile Markdown to PDF on the coreyai HOST with build-pdf.sh / generate_pdf.py: one render, a definitive pages=/bookmarks= report, and the exact WeasyPrint bookmark tuple shape. Host-only. Prevents infinite re-render loops."
+version: 1.1.0
 author: CoreyAI
 license: MIT
 platforms: [linux, macos]
 metadata:
   hermes:
     tags: [Documentation, PDF, WeasyPrint, Markdown, Verification, Loops]
-    related_skills: [mempalace]
+    related_skills: [mempalace, markdown-to-typeset-pdf, pdf]
 ---
 
 # PDF Generation (Markdown -> PDF)
+
+## Which tool — read this before writing any PDF code
+
+| You are | Use | Why |
+|---|---|---|
+| A **host** agent (OpenCode, shell on `coreyai`) | **`~/system-docs/build-pdf.sh`** (this skill) | WeasyPrint 70.0 + pango are installed in `~/system-docs/.venv`. Verified working. |
+| Inside the **Hermes container** | `markdown-to-typeset-pdf` (fpdf2) | This container has **no** WeasyPrint and **no** `libpangoft2`, and no `apt-get`. That skill is correct *there*. |
+| Reading/merging/filling/OCR an existing PDF | `pdf` | Different job entirely. |
+
+**Do not generalise either environment to the other.** The fpdf2 skill's "WeasyPrint's
+system libs are missing" note is true inside this container and false on the host;
+conversely `build-pdf.sh` does not exist from inside the container's `$PATH` view of a
+working WeasyPrint. Check which one you are in (`python3 -c "import weasyprint"`)
+before promising anything.
 
 Docs live in `~/system-docs`. `generate_pdf.py` converts Markdown -> HTML -> PDF with
 an embedded stylesheet. `build-pdf.sh` is the wrapper to use.
@@ -110,3 +124,11 @@ def bookmark_outline(document):
   list means an in-document `[§x](#anchor)` link points at a heading that does not exist.
 - Regenerating a PDF is cheap (~2.5 s for 15 pages). There is no reason to be clever
   about caching, and no reason to loop.
+
+## If you are in the Hermes container instead
+
+`build-pdf.sh` will not work: no WeasyPrint, no pango, no `apt-get`. Use the
+`markdown-to-typeset-pdf` skill (fpdf2 via
+`/opt/data/home/gpt-researcher-venv/bin/python`). Its guidance is correct for that
+environment — but note it was written by an agent and has never been reconciled with
+the host tooling, so do not cite it as the reason to avoid WeasyPrint *on the host*.
