@@ -2189,6 +2189,10 @@ onboarding:
     tool_progress_prompt: true
     busy_input_prompt: true
 mcp_servers:
+  appliances:
+    url: http://127.0.0.1:8888/mcp/appliances/
+    enabled: true
+    connect_timeout: 30.0
   gpt_researcher:
     url: http://127.0.0.1:8000/mcp
     connect_timeout: 60.0
