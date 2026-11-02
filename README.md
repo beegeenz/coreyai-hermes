@@ -70,6 +70,15 @@ Loopback-only listeners: `8642` (gateway API), `9119` (dashboard).
 - Back up `config.yaml` before any wizard run — the container rewrites it.
 - `config.yaml` is a large generated file (mostly comments) and will show as
   modified after `hermes config set`. That is expected.
+- **Hindsight writes only at a session boundary.** `hindsight/config.json` sets
+  `retain_every_n_turns: 100000`, so the plugin buffers turns and retains once on
+  session switch or shutdown instead of every N turns. `tools/boundary_sweep.py`
+  (06:30 on the host) covers any session whose process died before it flushed.
+  Reason: a mid-session retain puts the *current* conversation into the same bank the
+  agent recalls from, so it starts quoting its own narration back at the user. Hermes
+  persists every message to `state.db`, so a killed process loses nothing the sweep
+  cannot recover. Do not lower this to a small N "to keep memory fresh" — that
+  reintroduces the loop.
 
 ## What is not tracked
 
