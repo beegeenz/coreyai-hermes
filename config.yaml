@@ -1042,6 +1042,12 @@ agent:
   # Value: reasoning effort level (same options as reasoning_effort, dict form included)
   # Override the global reasoning_effort for that specific model.
   # NOTE: no `hermes config set` support for this key -- edit YAML directly.
+  # Strata only: the engine caps thinking at reasoning_budget_tokens=600 server-side,
+  # so "medium" costs the same wall time as "high" (measured 8.8s vs 8.6s). "low" keeps
+  # a deliberation step and saves ~3.5s per call; LiveKit and OpenCode set their own
+  # effort per request, so this key affects Hermes only.
+  reasoning_overrides:
+    "qwen3.8-flash-next": "low"
   # reasoning_overrides:
   #   "openrouter/anthropic/claude-opus-4.5": "xhigh"
   #   "openai/gpt-5": "low"
