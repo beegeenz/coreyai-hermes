@@ -51,6 +51,8 @@ models_dev_cache.json
 !/tools/secret-scan.sh
 !/tools/install-hooks.sh
 !/tools/check-model.sh
+# eBay Browse API search (stdlib only, reads ~/.hermes/secrets/ebay.json).
+!/tools/ebay_search.py
 
 # Hand-authored skills only. `skills/` as a whole is image-synced (bundled +
 # hub-installed bundles that `hermes update` owns), so re-including it would
@@ -79,3 +81,7 @@ models_dev_cache.json
 !/skills/devops/coreyai-host-environment/
 # Category-root skill (no category dir):
 !/skills/decision-briefings/
+# Hand-authored marketplace routing (eBay API + per-site mechanics). Kept in git
+# because the curator will not regenerate it and a lost copy means re-deriving
+# nine marketplaces' worth of measured behaviour.
+!/skills/ecommerce-product-search/
